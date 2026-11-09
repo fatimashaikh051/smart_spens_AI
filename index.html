@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpendSmart AI | Student Money Manager</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">₹</div>
+        <div><strong>SpendSmart</strong><small>AI MONEY COMPANION</small></div>
+      </div>
+      <nav>
+        <a class="nav-link active" href="#dashboard" data-page="dashboard"><span>▦</span> Dashboard</a>
+        <a class="nav-link" href="#expenses" data-page="expenses"><span>↗</span> Expenses</a>
+        <a class="nav-link" href="#budget" data-page="budget"><span>◷</span> Budget planner</a>
+        <a class="nav-link" href="#goals" data-page="goals"><span>◎</span> Savings goals</a>
+        <a class="nav-link" href="#insights" data-page="insights"><span>▥</span> Insights</a>
+        <a class="nav-link" href="#assistant" data-page="assistant"><span>✦</span> Smart assistant</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="student-card"><div class="avatar">S</div><div><b>Student mode</b><small>Simple money habits</small></div></div>
+        <small class="privacy-note">🔒 Your demo data stays in this browser.</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><p class="eyebrow" id="todayLabel">YOUR FINANCIAL SPACE</p><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-actions"><span class="month-pill" id="monthLabel"></span><button class="primary-btn" id="quickAddBtn">＋ Add expense</button></div>
+      </header>
+
+      <section class="page active" id="dashboard">
+        <div class="welcome-row">
+          <div><h2>Small steps. Smarter spending. 🌱</h2><p>Take control of your money, one day at a time.</p></div>
+          <div class="streak-pill">✦ Build your money habit</div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Monthly budget</span><span class="stat-icon purple">▤</span></div><strong id="dashBudget">₹5,000</strong><small>Your spending limit</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Spent this month</span><span class="stat-icon orange">↗</span></div><strong id="dashSpent">₹0</strong><small id="spentSub">Keep tracking every rupee</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Money remaining</span><span class="stat-icon green">₹</span></div><strong id="dashRemaining">₹5,000</strong><small>Available for this month</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Saved towards goals</span><span class="stat-icon blue">◎</span></div><strong id="dashSaved">₹0</strong><small>Across all your goals</small></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel budget-overview">
+            <div class="panel-heading"><div><h3>Budget overview</h3><p>Your monthly spending progress</p></div><span class="soft-tag">THIS MONTH</span></div>
+            <div class="progress-wrap"><div class="progress-track"><div id="budgetProgress" class="progress-fill"></div></div><div class="progress-label"><b id="progressPercent">0% used</b><span id="progressAmount">₹0 of ₹5,000</span></div></div>
+            <div id="budgetMessage" class="notice">You’re off to a fresh start. Add your first expense to see your progress.</div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Spending by category</h3><p>Where your money goes</p></div></div>
+            <div class="chart-holder"><canvas id="categoryChart"></canvas><div id="emptyChart" class="empty-chart">Your category chart will appear here after you add expenses.</div></div>
+          </article>
+          <article class="panel recent-panel">
+            <div class="panel-heading"><div><h3>Recent expenses</h3><p>Your latest money activity</p></div><a href="#expenses" class="text-link" data-goto="expenses">View all →</a></div>
+            <div id="recentExpenses" class="expense-list"><div class="empty-state">No expenses yet. Add one to get started.</div></div>
+          </article>
+          <article class="panel tip-panel">
+            <div class="tip-spark">✦</div><p class="eyebrow">MONEY TIP OF THE DAY</p><h3 id="dailyTip">Track small purchases. They can add up faster than you think.</h3><p>Good money habits start with awareness, not perfection.</p><button class="outline-btn" id="newTipBtn">Show another tip ↗</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="expenses">
+        <div class="section-intro"><div><h2>Expense tracker</h2><p>Record what you spend and understand your habits.</p></div><button class="primary-btn" id="expensePageAdd">＋ Add expense</button></div>
+        <div class="expense-summary-grid">
+          <article class="expense-summary-card"><span>Total expenses</span><strong id="monthTotal">₹0</strong><small>For selected month</small></article>
+          <article class="expense-summary-card"><span>Number of entries</span><strong id="monthCount">0</strong><small>Recorded transactions</small></article>
+          <article class="expense-summary-card"><span>Average expense</span><strong id="monthAverage">₹0</strong><small>Per transaction</small></article>
+        </div>
+        <div class="panel expense-table-panel">
+          <div class="expense-table-heading"><div><h3>Monthly expense statement</h3><p>All your transactions, organised in one simple table.</p></div><button class="outline-btn export-btn" id="exportExpenses">↓ Export CSV</button></div>
+          <div class="toolbar"><input id="expenseSearch" type="search" placeholder="Search by description or category..." aria-label="Search expenses"><select id="monthFilter" aria-label="Select month"></select><select id="categoryFilter"><option value="All">All categories</option><option>Food</option><option>Travel</option><option>Education</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>DATE</th><th>DESCRIPTION</th><th>CATEGORY</th><th class="right-align">AMOUNT</th><th>ACTION</th></tr></thead><tbody id="expenseTable"><tr><td colspan="5" class="empty-state">No expenses added yet.</td></tr></tbody></table></div>
+          <p class="table-footnote">Your expense records are saved in this browser on this device.</p>
+        </div>
+      </section>
+
+      <section class="page" id="budget">
+        <div class="section-intro"><div><h2>Plan your monthly budget</h2><p>Give every rupee a purpose before the month begins.</p></div></div>
+        <div class="budget-layout">
+          <article class="panel">
+            <h3>Set your monthly limit</h3><p class="muted">Choose an amount you can realistically manage.</p>
+            <form id="budgetForm" class="stack-form"><label>Monthly budget (₹)<input type="number" id="budgetInput" min="1" step="1" required></label><button class="primary-btn" type="submit">Save budget</button></form>
+          </article>
+          <article class="panel budget-summary"><span class="soft-tag">YOUR CURRENT PLAN</span><h2 id="budgetBig">₹5,000</h2><p>Monthly spending limit</p><div class="summary-line"><span>Spent</span><b id="budgetSpent">₹0</b></div><div class="summary-line"><span>Remaining</span><b id="budgetLeft">₹5,000</b></div><div class="progress-track"><div id="budgetProgress2" class="progress-fill"></div></div><p class="muted" id="budgetAdvice">Start by recording your daily expenses.</p></article>
+        </div>
+        <div class="panel category-plan"><h3>A simple student budget idea</h3><p class="muted">Example split for a ₹5,000 monthly budget. Adjust it to your real needs.</p><div class="allocation-list"><div><span>🍱 Food</span><b>₹1,750 · 35%</b></div><div><span>🚌 Travel</span><b>₹1,000 · 20%</b></div><div><span>📚 Education</span><b>₹1,000 · 20%</b></div><div><span>🛍️ Personal & fun</span><b>₹750 · 15%</b></div><div><span>🌱 Savings</span><b>₹500 · 10%</b></div></div></div>
+      </section>
+
+      <section class="page" id="goals">
+        <div class="section-intro"><div><h2>Savings goals</h2><p>Turn something you want into a plan you can follow.</p></div></div>
+        <div class="goal-layout">
+          <article class="panel"><h3>Create a savings goal</h3><form id="goalForm" class="stack-form"><label>What are you saving for?<input id="goalName" maxlength="45" placeholder="e.g. New headphones" required></label><label>Target amount (₹)<input id="goalTarget" type="number" min="1" required></label><label>Already saved (₹)<input id="goalCurrent" type="number" min="0" value="0"></label><button class="primary-btn" type="submit">＋ Create goal</button></form></article>
+          <article class="panel"><h3>Your goals</h3><div id="goalsList" class="goals-list"><div class="empty-state">No goals yet. Create your first savings goal.</div></div></article>
+        </div>
+      </section>
+
+      <section class="page" id="insights">
+        <div class="section-intro"><div><h2>Your spending insights</h2><p>Simple patterns that can help you make better choices.</p></div></div>
+        <div class="insight-grid"><article class="panel"><h3>Spending by category</h3><div class="chart-holder tall"><canvas id="insightChart"></canvas><div id="insightEmpty" class="empty-chart">Add expenses to unlock your insights.</div></div></article><article class="panel"><h3>Smart observations</h3><div id="insightNotes" class="insight-notes"><p class="empty-state">Your observations will appear after you record expenses.</p></div></article></div>
+      </section>
+
+      <section class="page" id="assistant">
+        <div class="section-intro"><div><h2>SpendSmart assistant ✦</h2><p>A simple rule-based demo helper that uses your recorded budget and expenses.</p></div></div>
+        <div class="assistant-layout"><article class="panel assistant-chat"><div class="assistant-head"><div class="bot-avatar">✦</div><div><b>Smart Money Buddy</b><small>Demo assistant · instant suggestions</small></div><span class="online-dot"></span></div><div id="chatMessages" class="chat-messages"><div class="bot-message">Hi! I can help you review your spending. Try asking: “How much is left?”, “Where do I spend most?”, or “Give me a saving tip.”</div></div><div class="suggestions"><button class="suggestion">How much is left?</button><button class="suggestion">Where do I spend most?</button><button class="suggestion">Give me a saving tip</button></div><form id="chatForm" class="chat-input"><input id="chatInput" placeholder="Ask about your money..." autocomplete="off"><button class="primary-btn" type="submit">Send ↑</button></form></article><aside class="panel assistant-side"><div class="bot-avatar large">✦</div><h3>Make smarter money moves</h3><p class="muted">This prototype generates suggestions from your local demo data. It does not connect to an external AI service or provide financial advice.</p><div class="mini-stat"><span>Budget used</span><b id="assistantUsed">0%</b></div><div class="mini-stat"><span>Recorded expenses</span><b id="assistantCount">0</b></div></aside></div>
+      </section>
+
+      <footer>SpendSmart AI · Student finance made simple · Prototype for ARATHON 26</footer>
+    </main>
+  </div>
+
+  <dialog id="expenseDialog">
+    <form id="expenseForm" class="dialog-form">
+      <div class="dialog-heading"><div><p class="eyebrow">MONEY TRACKER</p><h2>Add an expense</h2></div><button type="button" class="close-btn" id="closeDialog" aria-label="Close">×</button></div>
+      <label>What did you spend on?<input id="expenseName" maxlength="55" placeholder="e.g. Lunch, bus ticket" required></label>
+      <div class="form-two"><label>Amount (₹)<input id="expenseAmount" type="number" min="1" step="0.01" placeholder="150" required></label><label>Category<select id="expenseCategory"><option>Food</option><option>Travel</option><option>Education</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select></label></div>
+      <label>Date<input id="expenseDate" type="date" required></label>
+      <button class="primary-btn full-btn" type="submit">Save expense</button>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
